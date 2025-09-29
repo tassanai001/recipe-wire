@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecipeWire</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+    .btn {
+      border: 1px solid #222;
+      background: transparent;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .btn:hover {
+      background: #e0e0e0;
+    }
+    .card {
+      border: 1px solid #ccc;
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .img-ph {
+      width: 100%;
+      height: 160px;
+      background: #e0e0e0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .img-ph svg {
+      width: 100%;
+      height: 100%;
+      stroke: #ccc;
+      stroke-width: 1;
+    }
+    input, textarea, select {
+      border: 1px solid #ccc;
+      padding: 8px;
+      border-radius: 4px;
+      width: 100%;
+    }
+    [hidden] {
+      display: none;
+    }
+    .message {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin: 8px 0;
+    }
+    .error {
+      border-color: #900;
+      color: #900;
+    }
+    .success {
+      border-color: #090;
+      color: #090;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      z-index: 30;
+    }
+
+    /* Navigation */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #ccc;
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    nav .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    nav .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    nav .profile-ph {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      background: #e0e0e0;
+    }
+
+    /* Responsive Grid */
+    @media (min-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .recipe-view-grid {
+        grid-template-columns: 1fr 2fr;
+      }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <header role="banner">
+    <nav aria-label="เมนูนำทางหลัก">
+      <div class="logo">RecipeWire</div>
+      <div class="nav-links">
+        <button class="btn" onclick="switchScreen('landing')" aria-label="ไปที่หน้าแรก">หน้าแรก</button>
+        <button class="btn" onclick="switchScreen('signup')" aria-label="ไปที่หน้าสมัครสมาชิก">สมัครสมาชิก</button>
+        <button class="btn" onclick="switchScreen('login')" aria-label="ไปที่หน้าเข้าสู่ระบบ">เข้าสู่ระบบ</button>
+        <button class="btn" onclick="switchScreen('dashboard')" aria-label="ไปที่หน้าแดชบอร์ด">แดชบอร์ด</button>
+        <button class="btn" onclick="switchScreen('create')" aria-label="ไปที่หน้าสร้างสูตร">สร้างสูตร</button>
+        <button class="btn" onclick="switchScreen('view')" aria-label="ไปที่หน้าดูสูตร">ดูสูตร</button>
+        <button class="btn" onclick="switchScreen('search')" aria-label="ไปที่หน้าค้นหา">ค้นหา</button>
+      </div>
+      <div class="profile-ph" aria-label="โปรไฟล์ผู้ใช้" tabindex="0"></div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main role="main">
+    <!-- Landing Page -->
+    <section data-screen="landing" role="region" aria-label="หน้าแรก">
+      <div class="container">
+        <header class="hero" style="text-align: center; padding: 32px 0;">
+          <h1>RecipeWire</h1>
+          <p>Cook, Share, Inspire</p>
+          <div style="display: flex; gap: 12px; justify-content: center;">
+            <button class="btn" onclick="switchScreen('signup')" aria-label="สมัครสมาชิก">สมัครสมาชิก</button>
+            <button class="btn" onclick="switchScreen('login')" aria-label="เข้าสู่ระบบ">เข้าสู่ระบบ</button>
+          </div>
+        </header>
+        <h2>สูตรเด่น</h2>
+        <div class="grid grid-3">
+          <article class="card" aria-label="สูตรอาหาร 1">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 1</h3>
+            <p>30 นาที | ★★★☆☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+          <article class="card" aria-label="สูตรอาหาร 2">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 2</h3>
+            <p>45 นาที | ★★★★☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+          <article class="card" aria-label="สูตรอาหาร 3">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 3</h3>
+            <p>20 นาที | ★★★☆☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+          <article class="card" aria-label="สูตรอาหาร 4">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 4</h3>
+            <p>15 นาที | ★★★★☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+        </div>
+        <div style="text-align: center; padding: 32px 0;">
+          <button class="btn" onclick="switchScreen('signup')" aria-label="สมัครสมาชิก">สมัครสมาชิก</button>
+          <button class="btn" onclick="switchScreen('login')" aria-label="เข้าสู่ระบบ">เข้าสู่ระบบ</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign Up -->
+    <section data-screen="signup" hidden role="region" aria-label="หน้าสมัครสมาชิก">
+      <div class="container">
+        <h2>สมัครสมาชิก</h2>
+        <button class="btn" onclick="switchScreen('landing')" aria-label="กลับไปหน้าแรก">กลับไปหน้าแรก</button>
+        <div id="signup-message" class="message" hidden></div>
+        <form class="grid" aria-label="ฟอร์มสมัครสมาชิก" onsubmit="showSignupMessage(event)">
+          <label>
+            อีเมล
+            <input type="email" placeholder="อีเมล" required aria-label="ป้อนอีเมล">
+          </label>
+          <label>
+            รหัสผ่าน
+            <input type="password" placeholder="รหัสผ่าน" required aria-label="ป้อนรหัสผ่าน">
+          </label>
+          <label>
+            ยืนยันรหัสผ่าน
+            <input type="password" placeholder="ยืนยันรหัสผ่าน" required aria-label="ยืนยันรหัสผ่าน">
+          </label>
+          <label>
+            รูปโปรไฟล์
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+          </label>
+          <label>
+            เกี่ยวกับฉัน
+            <textarea placeholder="เกี่ยวกับฉัน" rows="4" aria-label="ป้อนข้อมูลเกี่ยวกับฉัน"></textarea>
+          </label>
+          <div>
+            <button class="btn" type="submit" aria-label="สร้างบัญชี">สร้างบัญชี</button>
+            <button class="btn" type="button" onclick="switchScreen('landing')" aria-label="ยกเลิก">ยกเลิก</button>
+            <button class="btn" onclick="switchScreen('login')" aria-label="ไปที่หน้าเข้าสู่ระบบ">มีบัญชีแล้ว? เข้าสู่ระบบ</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Login -->
+    <section data-screen="login" hidden role="region" aria-label="หน้าเข้าสู่ระบบ">
+      <div class="container">
+        <h2>เข้าสู่ระบบ</h2>
+        <button class="btn" onclick="switchScreen('landing')" aria-label="กลับไปหน้าแรก">กลับไปหน้าแรก</button>
+        <div id="login-message" class="message" hidden></div>
+        <form class="grid" aria-label="ฟอร์มเข้าสู่ระบบ" onsubmit="showLoginMessage(event)">
+          <label>
+            อีเมล
+            <input type="email" placeholder="อีเมล" required aria-label="ป้อนอีเมล">
+          </label>
+          <label>
+            รหัสผ่าน
+            <input type="password" placeholder="รหัสผ่าน" required aria-label="ป้อนรหัสผ่าน">
+          </label>
+          <div>
+            <button class="btn" type="submit" aria-label="เข้าสู่ระบบ">เข้าสู่ระบบ</button>
+            <button class="btn" type="button" onclick="switchScreen('landing')" aria-label="ยกเลิก">ยกเลิก</button>
+            <button class="btn" aria-label="ลืมรหัสผ่าน">ลืมรหัสผ่าน?</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section data-screen="dashboard" hidden role="region" aria-label="หน้าแดชบอร์ด">
+      <div class="container">
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+          <input type="text" id="dashboard-search" placeholder="ค้นหาสูตร..." oninput="searchRecipes()" aria-label="ค้นหาสูตร">
+          <button class="btn" onclick="switchScreen('create')" aria-label="เพิ่มสูตรใหม่">+ เพิ่มสูตร</button>
+        </div>
+        <div id="search-results" hidden aria-label="ผลลัพธ์การค้นหาในแดชบอร์ด">
+          <h3>ผลลัพธ์การค้นหา</h3>
+          <div class="grid grid-3" id="search-results-grid"></div>
+        </div>
+        <h2>สูตรล่าสุด</h2>
+        <div class="grid grid-3">
+          <article class="card" aria-label="สูตรล่าสุด 1">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 1</h3>
+            <p>โดย: ผู้ใช้ A | 30 นาที | ★★★☆☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+          <article class="card" aria-label="สูตรล่าสุด 2">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 2</h3>
+            <p>โดย: ผู้ใช้ B | 45 นาที | ★★★★☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+        </div>
+        <h2>สูตรยอดนิยม</h2>
+        <div class="grid grid-3">
+          <article class="card" aria-label="สูตรยอดนิยม 1">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 3</h3>
+            <p>โดย: ผู้ใช้ C | 20 นาที | ★★★★☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+          <article class="card" aria-label="สูตรยอดนิยม 2">
+            <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            <h3>ชื่อเมนู 4</h3>
+            <p>โดย: ผู้ใช้ D | 15 นาที | ★★★★☆</p>
+            <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Create/Edit Recipe -->
+    <section data-screen="create" hidden role="region" aria-label="หน้าสร้างหรือแก้ไขสูตร">
+      <div class="container grid grid-2">
+        <div>
+          <h2>สร้างสูตร</h2>
+          <form class="grid" aria-label="ฟอร์มสร้างสูตร">
+            <label>
+              ชื่อเมนู
+              <input type="text" id="recipe-title" placeholder="ชื่อเมนู" oninput="updatePreview()" aria-label="ป้อนชื่อเมนู">
+            </label>
+            <label>
+              ส่วนผสม
+              <ul id="ingredients-list" aria-label="รายการส่วนผสม">
+                <li><input type="text" placeholder="ส่วนผสม 1" oninput="updatePreview()" aria-label="ป้อนส่วนผสม"></li>
+              </ul>
+              <button class="btn" type="button" onclick="addIngredientRow()" aria-label="เพิ่มส่วนผสม">+ เพิ่มส่วนผสม</button>
+            </label>
+            <label>
+              ขั้นตอน
+              <ol id="steps-list" aria-label="รายการขั้นตอน">
+                <li><textarea placeholder="ขั้นตอน 1" rows="2" oninput="updatePreview()" aria-label="ป้อนขั้นตอน"></textarea></li>
+              </ol>
+              <button class="btn" type="button" onclick="addStepRow()" aria-label="เพิ่มขั้นตอน">+ เพิ่มขั้นตอน</button>
+            </label>
+            <label>
+              เวลา (นาที)
+              <input type="number" id="recipe-time" placeholder="เวลา (นาที)" oninput="updatePreview()" aria-label="ป้อนเวลาในหน่วยนาที">
+            </label>
+            <label>
+              ประเภทอาหาร
+              <select aria-label="เลือกประเภทอาหาร">
+                <option>ของหวาน</option>
+                <option>อาหารเช้า</option>
+                <option>จานหลัก</option>
+              </select>
+            </label>
+            <label>
+              รูปสูตร
+              <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+            </label>
+            <div>
+              <button class="btn" type="submit" aria-label="บันทึกสูตร">บันทึก</button>
+              <button class="btn" type="button" onclick="switchScreen('dashboard')" aria-label="ยกเลิก">ยกเลิก</button>
+              <button class="btn" type="button" aria-label="ลบสูตร">ลบ</button>
+            </div>
+          </form>
+        </div>
+        <aside class="card" aria-label="ตัวอย่างสูตร">
+          <h3>ตัวอย่างสูตร</h3>
+          <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+          <h4 id="preview-title">ชื่อเมนู</h4>
+          <p id="preview-time">0 นาที</p>
+          <h5>ส่วนผสม</h5>
+          <ul id="preview-ingredients"></ul>
+          <h5>ขั้นตอน</h5>
+          <ol id="preview-steps"></ol>
+        </aside>
+      </div>
+    </section>
+
+    <!-- View Recipe -->
+    <section data-screen="view" hidden role="region" aria-label="หน้าดูสูตร">
+      <div class="container recipe-view-grid">
+        <div>
+          <div class="img-ph" style="height: 220px;"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+        </div>
+        <div>
+          <h2>ชื่อเมนู</h2>
+          <p>เวลา: 30 นาที | ประเภท: จานหลัก | โดย: ผู้ใช้ A</p>
+          <p>คะแนน: ★★★★☆ (5 รีวิว)</p>
+          <div id="owner-actions" hidden>
+            <button class="btn" onclick="switchScreen('create')" aria-label="แก้ไขสูตร">แก้ไข</button>
+            <button class="btn" aria-label="ลบสูตร">ลบ</button>
+          </div>
+          <button class="btn" onclick="openReviewModal()" aria-label="ให้คะแนนและรีวิว">ให้คะแนน + รีวิว</button>
+          <h3>ส่วนผสม</h3>
+          <ul>
+            <li>ส่วนผสม 1</li>
+            <li>ส่วนผสม 2</li>
+          </ul>
+          <h3>ขั้นตอน</h3>
+          <ol>
+            <li>ขั้นตอน 1</li>
+            <li>ขั้นตอน 2</li>
+          </ol>
+          <h3>รีวิว</h3>
+          <div id="reviews-list" aria-label="รายการรีวิว">
+            <p>รีวิว 1: ★★★★☆ - อร่อยมาก!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filter -->
+    <section data-screen="search" hidden role="region" aria-label="หน้าค้นหา">
+      <div class="container grid grid-2">
+        <aside aria-label="ตัวกรองการค้นหา">
+          <h3>ตัวกรอง</h3>
+          <label>
+            ประเภทอาหาร
+            <div>
+              <label><input type="checkbox" aria-label="ของหวาน"> ของหวาน</label>
+              <label><input type="checkbox" aria-label="อาหารเช้า"> อาหารเช้า</label>
+              <label><input type="checkbox" aria-label="จานหลัก"> จานหลัก</label>
+            </div>
+          </label>
+          <label>
+            เวลา (นาที)
+            <input type="range" min="0" max="120" id="time-filter" oninput="updateTimeFilter()" aria-label="ตัวกรองเวลา">
+            <span id="time-filter-value">0–120 นาที</span>
+          </label>
+          <label>
+            ข้อจำกัดอาหาร
+            <div>
+              <label><input type="checkbox" aria-label="มังสวิรัติ"> มังสวิรัติ</label>
+              <label><input type="checkbox" aria-label="ไร้กลูเตน"> ไร้กลูเตน</label>
+            </div>
+          </label>
+          <button class="btn" onclick="applyFilters()" aria-label="ใช้ตัวกรอง">ใช้ตัวกรอง</button>
+        </aside>
+        <div>
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <input type="text" placeholder="ค้นหาสูตร..." aria-label="ค้นหาสูตร">
+            <select aria-label="เรียงลำดับผลลัพธ์">
+              <option>ความนิยม</option>
+              <option>ล่าสุด</option>
+              <option>เวลา</option>
+            </select>
+          </div>
+          <div class="grid grid-3">
+            <article class="card" aria-label="ผลลัพธ์การค้นหา 1">
+              <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+              <h3>ชื่อเมนู 1</h3>
+              <p>โดย: ผู้ใช้ A | 30 นาที | ★★★☆☆</p>
+              <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Review Modal -->
+  <div id="modal-review" class="modal-overlay" hidden role="dialog" aria-label="หน้าต่างให้คะแนนและรีวิว">
+    <div class="modal-content">
+      <h3>ให้คะแนนและรีวิว</h3>
+      <p id="rating-message" hidden>คุณให้ <span id="rating-value"></span> ดาว</p>
+      <div style="display: flex; gap: 8px; margin: 12px 0;">
+        <button class="btn" onclick="setRating(1)" aria-label="ให้คะแนน 1 ดาว">★</button>
+        <button class="btn" onclick="setRating(2)" aria-label="ให้คะแนน 2 ดาว">★</button>
+        <button class="btn" onclick="setRating(3)" aria-label="ให้คะแนน 3 ดาว">★</button>
+        <button class="btn" onclick="setRating(4)" aria-label="ให้คะแนน 4 ดาว">★</button>
+        <button class="btn" onclick="setRating(5)" aria-label="ให้คะแนน 5 ดาว">★</button>
+      </div>
+      <textarea id="review-text" placeholder="เขียนรีวิว..." rows="4" aria-label="ป้อนข้อความรีวิว"></textarea>
+      <div style="display: flex; gap: 12px; margin-top: 12px;">
+        <button class="btn" onclick="submitReview()" aria-label="ส่งรีวิว">ส่ง</button>
+        <button class="btn" onclick="closeReviewModal()" aria-label="ปิดหน้าต่าง">ปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" hidden aria-label="การแจ้งเตือน"></div>
+
+  <!-- JavaScript -->
+  <script>
+    // Mock user data
+    const currentUser = { id: 'userA' }; // Mock logged-in user
+    const recipeOwner = 'userA'; // Mock recipe owner
+
+    // Switch between screens
+    function switchScreen(screenName) {
+      document.querySelectorAll('section[data-screen]').forEach(section => {
+        section.hidden = section.dataset.screen !== screenName;
+      });
+    }
+
+    // Add ingredient row
+    function addIngredientRow() {
+      const list = document.getElementById('ingredients-list');
+      const li = document.createElement('li');
+      li.innerHTML = '<input type="text" placeholder="ส่วนผสม" oninput="updatePreview()" aria-label="ป้อนส่วนผสม">';
+      list.appendChild(li);
+      updatePreview();
+    }
+
+    // Add step row
+    function addStepRow() {
+      const list = document.getElementById('steps-list');
+      const li = document.createElement('li');
+      li.innerHTML = '<textarea placeholder="ขั้นตอน" rows="2" oninput="updatePreview()" aria-label="ป้อนขั้นตอน"></textarea>';
+      list.appendChild(li);
+      updatePreview();
+    }
+
+    // Update recipe preview
+    function updatePreview() {
+      const title = document.getElementById('recipe-title').value || 'ชื่อเมนู';
+      const time = document.getElementById('recipe-time').value || '0';
+      const ingredients = Array.from(document.querySelectorAll('#ingredients-list input'))
+        .map(input => input.value)
+        .filter(val => val);
+      const steps = Array.from(document.querySelectorAll('#steps-list textarea'))
+        .map(textarea => textarea.value)
+        .filter(val => val);
+
+      document.getElementById('preview-title').textContent = title;
+      document.getElementById('preview-time').textContent = time + ' นาที';
+      const ingredientsList = document.getElementById('preview-ingredients');
+      ingredientsList.innerHTML = ingredients.length ? ingredients.map(ing => `<li>${ing}</li>`).join('') : '<li>ไม่มีส่วนผสม</li>';
+      const stepsList = document.getElementById('preview-steps');
+      stepsList.innerHTML = steps.length ? steps.map((step, i) => `<li>${step}</li>`).join('') : '<li>ไม่มีขั้นตอน</li>';
+    }
+
+    // Dashboard search
+    const mockRecipes = [
+      { title: 'ชื่อเมนู 1', author: 'ผู้ใช้ A', time: 30, rating: '★★★☆☆' },
+      { title: 'ชื่อเมนู 2', author: 'ผู้ใช้ B', time: 45, rating: '★★★★☆' },
+      { title: 'ชื่อเมนู 3', author: 'ผู้ใช้ C', time: 20, rating: '★★★★☆' },
+      { title: 'ชื่อเมนู 4', author: 'ผู้ใช้ D', time: 15, rating: '★★★★☆' }
+    ];
+    function searchRecipes() {
+      const query = document.getElementById('dashboard-search').value.toLowerCase();
+      const resultsGrid = document.getElementById('search-results-grid');
+      const resultsSection = document.getElementById('search-results');
+      if (!query) {
+        resultsSection.hidden = true;
+        return;
+      }
+      resultsSection.hidden = false;
+      const filtered = mockRecipes.filter(recipe => recipe.title.toLowerCase().includes(query));
+      resultsGrid.innerHTML = filtered.length ? filtered.map(recipe => `
+        <article class="card" aria-label="ผลลัพธ์การค้นหา ${recipe.title}">
+          <div class="img-ph"><svg><line x1="0" y1="0" x2="100%" y2="100%"/><line x1="0" y1="100%" x2="100%" y2="0"/></svg></div>
+          <h3>${recipe.title}</h3>
+          <p>โดย: ${recipe.author} | ${recipe.time} นาที | ${recipe.rating}</p>
+          <button class="btn" onclick="switchScreen('view')" aria-label="ดูรายละเอียดสูตร">ดูรายละเอียด</button>
+        </article>
+      `).join('') : '<p>ไม่พบผลลัพธ์</p>';
+    }
+
+    // Review modal handling
+    let currentRating = 0;
+    function setRating(rating) {
+      currentRating = rating;
+      document.querySelectorAll('#modal-review .btn').forEach((btn, index) => {
+        btn.style.background = index < rating ? '#ccc' : 'transparent';
+      });
+      const ratingMessage = document.getElementById('rating-message');
+      ratingMessage.hidden = false;
+      document.getElementById('rating-value').textContent = rating;
+    }
+    function openReviewModal() {
+      document.getElementById('modal-review').hidden = false;
+    }
+    function closeReviewModal() {
+      document.getElementById('modal-review').hidden = true;
+      document.getElementById('review-text').value = '';
+      document.getElementById('rating-message').hidden = true;
+      setRating(0);
+    }
+    function submitReview() {
+      if (currentRating === 0) return;
+      const reviewText = document.getElementById('review-text').value || 'ไม่มีข้อความ';
+      const reviewsList = document.getElementById('reviews-list');
+      const review = document.createElement('p');
+      review.textContent = `รีวิว: ${'★'.repeat(currentRating)}${'☆'.repeat(5 - currentRating)} - ${reviewText}`;
+      reviewsList.insertBefore(review, reviewsList.firstChild); // Latest review on top
+      closeReviewModal();
+      showToast('รีวิวถูกส่งเรียบร้อยแล้ว');
+    }
+
+    // Toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.hidden = false;
+      setTimeout(() => toast.hidden = true, 2000);
+    }
+
+    // Signup/Login messages
+    function showSignupMessage(event) {
+      event.preventDefault();
+      const messageDiv = document.getElementById('signup-message');
+      messageDiv.textContent = 'สร้างบัญชีสำเร็จ';
+      messageDiv.className = 'message success';
+      messageDiv.hidden = false;
+    }
+    function showLoginMessage(event) {
+      event.preventDefault();
+      const messageDiv = document.getElementById('login-message');
+      messageDiv.textContent = 'เข้าสู่ระบบสำเร็จ';
+      messageDiv.className = 'message success';
+      messageDiv.hidden = false;
+    }
+
+    // Owner actions (mock condition)
+    function checkOwner() {
+      document.getElementById('owner-actions').hidden = currentUser.id !== recipeOwner;
+    }
+
+    // Time filter
+    function updateTimeFilter() {
+      const slider = document.getElementById('time-filter');
+      document.getElementById('time-filter-value').textContent = `0–${slider.value} นาที`;
+    }
+    function applyFilters() {
+      showToast('ใช้ตัวกรองเรียบร้อยแล้ว');
+    }
+
+    // Initialize
+    switchScreen('landing');
+    checkOwner();
+  </script>
+</body>
+</html>
