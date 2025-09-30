@@ -1,17 +1,21 @@
 # Epic 5: Review & Rating System
 
 ## Epic Goal
+
 สร้างระบบรีวิวและให้คะแนนสูตรอาหาร เพื่อให้ผู้ใช้สามารถแสดงความคิดเห็นและให้คะแนนสูตรของผู้อื่น ช่วยสร้างความน่าเชื่อถือและการมีส่วนร่วมในชุมชน
 
 ## Epic Owner
+
 Development Team
 
 ## Dependencies
+
 - Epic 1: Project Setup & Infrastructure
 - Epic 2: Authentication & User System
 - Epic 3: Recipe Management
 
 ## Target Sprint/Timeline
+
 Sprint 8-9 (Week 11-12)
 
 ---
@@ -19,11 +23,13 @@ Sprint 8-9 (Week 11-12)
 ## User Stories
 
 ### Story 5.1: Review Data Model & Database Schema
+
 **As a** developer,
 **I want** a review data model with rating aggregation,
 **so that** I can store reviews and calculate recipe ratings efficiently
 
 **Acceptance Criteria:**
+
 1. Prisma schema updated with Review model:
    - id (UUID, PK)
    - recipeId (UUID, FK to Recipe, required)
@@ -40,7 +46,7 @@ Sprint 8-9 (Week 11-12)
    - Automatically updates Recipe.avgRating and Recipe.ratingsCount
    - Trigger function calculates:
      - avgRating = AVG(rating) from all reviews
-     - ratingsCount = COUNT(*) of reviews
+     - ratingsCount = COUNT(\*) of reviews
 4. Database indexes:
    - Review.recipeId (for fetching recipe reviews)
    - Review.userId (for user's reviews)
@@ -49,6 +55,7 @@ Sprint 8-9 (Week 11-12)
 6. Test data verifies trigger works correctly
 
 **Technical Notes:**
+
 - Use CHECK constraint for rating (1-5)
 - Denormalize avgRating and ratingsCount for performance
 - Trigger ensures data consistency
@@ -57,11 +64,13 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ### Story 5.2: Review Creation API
+
 **As a** logged-in user,
 **I want** to submit a review and rating for a recipe,
 **so that** I can share my experience with others
 
 **Acceptance Criteria:**
+
 1. `POST /v1/recipes/:recipeId/reviews` endpoint created (protected)
 2. Request body validation:
    - rating: required, integer 1-5
@@ -85,6 +94,7 @@ Sprint 8-9 (Week 11-12)
 7. Integration test verifies review creation and rating update
 
 **Technical Notes:**
+
 - Check recipe ownership: `recipe.ownerId !== request.user.id`
 - Check existing review: query by (recipeId, userId)
 - Return review with populated user data
@@ -93,11 +103,13 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ### Story 5.3: Review Read & List APIs
+
 **As a** user,
 **I want** to view reviews for a recipe,
 **so that** I can learn from others' experiences
 
 **Acceptance Criteria:**
+
 1. `GET /v1/recipes/:recipeId/reviews` endpoint created (public):
    - Returns paginated list of reviews for recipe
    - Query parameters:
@@ -121,6 +133,7 @@ Sprint 8-9 (Week 11-12)
 4. Unit and integration tests
 
 **Technical Notes:**
+
 - Use Prisma `include` for user data
 - Implement pagination with skip/take
 - Order by createdAt or rating based on sort param
@@ -129,11 +142,13 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ### Story 5.4: Review Update & Delete APIs
+
 **As a** review author,
 **I want** to edit or delete my review,
 **so that** I can update my opinion or remove my review
 
 **Acceptance Criteria:**
+
 1. `PATCH /v1/reviews/:id` endpoint created (protected):
    - Only review author can update
    - Updatable fields: rating, comment
@@ -159,6 +174,7 @@ Sprint 8-9 (Week 11-12)
 5. Integration tests verify updates and deletions affect rating
 
 **Technical Notes:**
+
 - Ownership check: `review.userId === request.user.id`
 - Trigger handles rating recalculation automatically
 - Log update/delete events
@@ -166,11 +182,13 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ### Story 5.5: Review Section on Recipe Detail Page
+
 **As a** user,
 **I want** to see reviews and ratings on recipe detail page,
 **so that** I can evaluate the recipe before trying it
 
 **Acceptance Criteria:**
+
 1. Recipe detail page enhanced with reviews section:
    - Rating summary at top:
      - Large star display showing avgRating
@@ -209,6 +227,7 @@ Sprint 8-9 (Week 11-12)
 7. Accessibility compliant
 
 **Technical Notes:**
+
 - Use React Query for fetching and mutating reviews
 - Use shadcn/ui: Dialog, Textarea, Button, AlertDialog
 - Implement star rating component (interactive)
@@ -218,11 +237,13 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ### Story 5.6: User Reviews Dashboard
+
 **As a** logged-in user,
 **I want** to see all my reviews in one place,
 **so that** I can manage my reviews easily
 
 **Acceptance Criteria:**
+
 1. User profile/dashboard enhanced with "My Reviews" section:
    - List of all user's reviews
    - Each review shows:
@@ -237,6 +258,7 @@ Sprint 8-9 (Week 11-12)
 3. Responsive design
 
 **Technical Notes:**
+
 - Create new API endpoint: `GET /v1/me/reviews`
 - Returns user's reviews with recipe data
 - Use same review components as recipe detail page
@@ -245,11 +267,13 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ### Story 5.7: Rating Display on Recipe Cards
+
 **As a** user,
 **I want** to see ratings on recipe cards,
 **so that** I can quickly identify popular recipes
 
 **Acceptance Criteria:**
+
 1. Recipe card component enhanced:
    - Star rating display (read-only)
    - Shows avgRating (e.g., "4.5 ⭐")
@@ -266,6 +290,7 @@ Sprint 8-9 (Week 11-12)
 4. Responsive and accessible
 
 **Technical Notes:**
+
 - Create reusable StarRating component
 - Use avgRating and ratingsCount from recipe data
 - Style with CSS or use icon library (Lucide)
@@ -274,6 +299,7 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ## Epic Acceptance Criteria
+
 - [ ] All 7 stories completed and tested
 - [ ] Users can submit reviews with ratings (1-5 stars) and comments
 - [ ] Users can view all reviews for a recipe
@@ -286,6 +312,7 @@ Sprint 8-9 (Week 11-12)
 - [ ] Unit and integration tests passing
 
 ## Technical Dependencies
+
 - Epic 1, 2, and 3 completed
 - PostgreSQL triggers for rating aggregation
 - Prisma for database operations
@@ -293,6 +320,7 @@ Sprint 8-9 (Week 11-12)
 - shadcn/ui for UI components
 
 ## Business Rules
+
 - Users must be logged in to submit reviews
 - Users cannot review their own recipes
 - One review per user per recipe
@@ -302,6 +330,7 @@ Sprint 8-9 (Week 11-12)
 - Only review author can edit/delete their review
 
 ## Performance Considerations
+
 - Denormalized avgRating and ratingsCount for fast reads
 - Database trigger ensures consistency
 - Indexes on recipeId and userId for fast queries
@@ -309,6 +338,7 @@ Sprint 8-9 (Week 11-12)
 - Consider caching recipe ratings (Phase 2)
 
 ## Risks & Mitigations
+
 - **Risk:** Fake or spam reviews
   - **Mitigation:** Implement moderation tools (Phase 2), rate limiting
 - **Risk:** Trigger performance issues with many reviews
@@ -317,6 +347,7 @@ Sprint 8-9 (Week 11-12)
   - **Mitigation:** Implement review verification, user reputation (Phase 2)
 
 ## Definition of Done
+
 - All stories meet acceptance criteria
 - Code reviewed and merged
 - Database trigger tested and optimized

@@ -9,6 +9,7 @@ This directory contains all individual user stories for the RecipeWire MVP proje
 ## 📋 Story Index by Epic
 
 ### Epic 1: Project Setup & Infrastructure (6 stories)
+
 Sprint 1 (Week 1-2)
 
 - [Story 1.1: Initialize Monorepo Structure](./story-1/story-1.1-initialize-monorepo.md)
@@ -21,6 +22,7 @@ Sprint 1 (Week 1-2)
 ---
 
 ### Epic 2: Authentication & User System (6 stories)
+
 Sprint 2-3 (Week 3-4)
 
 - [Story 2.1: User Registration API](./story-2/story-2.1-user-registration-api.md)
@@ -33,6 +35,7 @@ Sprint 2-3 (Week 3-4)
 ---
 
 ### Epic 3: Recipe Management (9 stories)
+
 Sprint 4-6 (Week 5-8)
 
 - [Story 3.1: Recipe Data Model & Database Schema](./story-3/story-3.1-recipe-data-model.md)
@@ -48,6 +51,7 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Epic 4: Search & Filter (6 stories)
+
 Sprint 7 (Week 9-10)
 
 - [Story 4.1: PostgreSQL Full-Text Search Setup](./story-4/story-4.1-postgresql-fts-setup.md)
@@ -60,6 +64,7 @@ Sprint 7 (Week 9-10)
 ---
 
 ### Epic 5: Review & Rating System (7 stories)
+
 Sprint 8-9 (Week 11-12)
 
 - [Story 5.1: Review Data Model & Database Schema](./story-5/story-5.1-review-data-model.md)
@@ -73,6 +78,7 @@ Sprint 8-9 (Week 11-12)
 ---
 
 ### Epic 6: Testing & Deployment (7 stories)
+
 Sprint 10-11 (Week 13-15)
 
 - [Story 6.1: Unit Testing Setup & Core Tests](./story-6/story-6.1-unit-testing-setup.md)
@@ -87,15 +93,15 @@ Sprint 10-11 (Week 13-15)
 
 ## 📊 Story Statistics
 
-| Epic | Stories | Estimated Points | Sprint |
-|------|---------|------------------|--------|
-| Epic 1 | 6 | ~26 | Sprint 1 |
-| Epic 2 | 6 | ~31 | Sprint 2-3 |
-| Epic 3 | 9 | ~51 | Sprint 4-6 |
-| Epic 4 | 6 | ~27 | Sprint 7 |
-| Epic 5 | 7 | ~32 | Sprint 8-9 |
-| Epic 6 | 7 | ~50 | Sprint 10-11 |
-| **Total** | **41** | **~217** | **11 sprints** |
+| Epic      | Stories | Estimated Points | Sprint         |
+| --------- | ------- | ---------------- | -------------- |
+| Epic 1    | 6       | ~26              | Sprint 1       |
+| Epic 2    | 6       | ~31              | Sprint 2-3     |
+| Epic 3    | 9       | ~51              | Sprint 4-6     |
+| Epic 4    | 6       | ~27              | Sprint 7       |
+| Epic 5    | 7       | ~32              | Sprint 8-9     |
+| Epic 6    | 7       | ~50              | Sprint 10-11   |
+| **Total** | **41**  | **~217**         | **11 sprints** |
 
 ---
 

@@ -1,15 +1,19 @@
 # Epic 2: Authentication & User System
 
 ## Epic Goal
+
 สร้างระบบ authentication และ user management ที่ปลอดภัย รวมถึง user registration, login, JWT token management, และ user profile CRUD เพื่อให้ผู้ใช้สามารถสร้างบัญชีและจัดการข้อมูลส่วนตัวได้
 
 ## Epic Owner
+
 Development Team
 
 ## Dependencies
+
 - Epic 1: Project Setup & Infrastructure (ต้องเสร็จก่อน)
 
 ## Target Sprint/Timeline
+
 Sprint 2-3 (Week 3-4)
 
 ---
@@ -17,11 +21,13 @@ Sprint 2-3 (Week 3-4)
 ## User Stories
 
 ### Story 2.1: User Registration API
+
 **As a** new user,
 **I want** to create an account with email and password,
 **so that** I can access the platform and share recipes
 
 **Acceptance Criteria:**
+
 1. `POST /v1/auth/signup` endpoint created
 2. Request validation:
    - Email: valid format, unique
@@ -43,6 +49,7 @@ Sprint 2-3 (Week 3-4)
 8. Integration test verifies database record creation
 
 **Technical Notes:**
+
 - Use Zod for request validation
 - Hash password with bcrypt before saving
 - Return sanitized user object (exclude password_hash)
@@ -51,11 +58,13 @@ Sprint 2-3 (Week 3-4)
 ---
 
 ### Story 2.2: User Login & JWT Token Generation
+
 **As a** registered user,
 **I want** to log in with my email and password,
 **so that** I can access my account and protected features
 
 **Acceptance Criteria:**
+
 1. `POST /v1/auth/login` endpoint created
 2. Request validation:
    - Email: required, valid format
@@ -78,6 +87,7 @@ Sprint 2-3 (Week 3-4)
 8. Unit and integration tests cover success and failure cases
 
 **Technical Notes:**
+
 - Use `@nestjs/jwt` for token generation
 - Store JWT secret in environment variables
 - Use RS256 algorithm (generate key pair)
@@ -87,11 +97,13 @@ Sprint 2-3 (Week 3-4)
 ---
 
 ### Story 2.3: JWT Authentication Guard & Token Refresh
+
 **As a** logged-in user,
 **I want** my session to be maintained securely,
 **so that** I can access protected resources without re-logging in frequently
 
 **Acceptance Criteria:**
+
 1. JWT Authentication Guard created and configured globally
 2. Guard validates access token on protected routes:
    - Verify token signature
@@ -114,6 +126,7 @@ Sprint 2-3 (Week 3-4)
 7. Integration tests verify protected route access
 
 **Technical Notes:**
+
 - Use `@nestjs/passport` and `passport-jwt`
 - Extract token from `Authorization: Bearer <token>` header
 - Attach user object to `request.user`
@@ -122,11 +135,13 @@ Sprint 2-3 (Week 3-4)
 ---
 
 ### Story 2.4: User Profile Management API
+
 **As a** logged-in user,
 **I want** to view and update my profile information,
 **so that** I can personalize my account
 
 **Acceptance Criteria:**
+
 1. `GET /v1/me` endpoint created (protected):
    - Returns current user profile
    - Excludes password hash
@@ -145,6 +160,7 @@ Sprint 2-3 (Week 3-4)
 6. Integration tests verify profile updates
 
 **Technical Notes:**
+
 - Use JWT guard to protect endpoints
 - Validate updates with Zod schemas
 - Return sanitized user object
@@ -153,11 +169,13 @@ Sprint 2-3 (Week 3-4)
 ---
 
 ### Story 2.5: Frontend Authentication Pages & State Management
+
 **As a** user,
 **I want** intuitive signup and login pages,
 **so that** I can easily create an account or access my existing account
 
 **Acceptance Criteria:**
+
 1. Signup page created at `/signup`:
    - Form fields: email, password, confirm password, display name
    - Client-side validation matches API requirements
@@ -189,6 +207,7 @@ Sprint 2-3 (Week 3-4)
 8. Accessibility: proper labels, keyboard navigation, ARIA attributes
 
 **Technical Notes:**
+
 - Use shadcn/ui components: Form, Input, Button, Card
 - Use React Hook Form for form management
 - Use Zod for client-side validation (shared schema from `@recipe-wire/types`)
@@ -198,11 +217,13 @@ Sprint 2-3 (Week 3-4)
 ---
 
 ### Story 2.6: User Profile Page & Edit Functionality
+
 **As a** logged-in user,
 **I want** a profile page where I can view and edit my information,
 **so that** I can keep my account up to date
 
 **Acceptance Criteria:**
+
 1. Profile page created at `/profile`:
    - Protected route (requires authentication)
    - Displays current user information:
@@ -229,6 +250,7 @@ Sprint 2-3 (Week 3-4)
 7. Accessibility compliant
 
 **Technical Notes:**
+
 - Use shadcn/ui: Dialog, Form, Avatar, Button
 - Use React Query mutations for updates
 - Optimistic updates for better UX
@@ -237,6 +259,7 @@ Sprint 2-3 (Week 3-4)
 ---
 
 ## Epic Acceptance Criteria
+
 - [ ] All 6 stories completed and tested
 - [ ] Users can sign up with email and password
 - [ ] Users can log in and receive JWT tokens
@@ -248,6 +271,7 @@ Sprint 2-3 (Week 3-4)
 - [ ] Security best practices followed (password hashing, JWT validation)
 
 ## Technical Dependencies
+
 - Epic 1 completed (database, backend, frontend skeleton)
 - bcrypt for password hashing
 - @nestjs/jwt and @nestjs/passport for JWT
@@ -255,6 +279,7 @@ Sprint 2-3 (Week 3-4)
 - Zustand for auth state management
 
 ## Security Considerations
+
 - Passwords hashed with bcrypt (cost factor 10+)
 - JWT tokens signed with RS256
 - Access tokens short-lived (15 minutes)
@@ -264,12 +289,14 @@ Sprint 2-3 (Week 3-4)
 - Rate limiting on auth endpoints (Phase 2)
 
 ## Risks & Mitigations
+
 - **Risk:** Token theft/XSS attacks
   - **Mitigation:** Use httpOnly cookies (Phase 2), implement CSP headers
 - **Risk:** Brute force attacks on login
   - **Mitigation:** Implement rate limiting (Phase 2), account lockout after failed attempts
 
 ## Definition of Done
+
 - All stories meet acceptance criteria
 - Code reviewed and merged
 - Unit tests: 80%+ coverage for auth logic

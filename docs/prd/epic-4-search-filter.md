@@ -1,16 +1,20 @@
 # Epic 4: Search & Filter
 
 ## Epic Goal
+
 สร้างระบบค้นหาและกรองสูตรอาหารที่มีประสิทธิภาพ ใช้ PostgreSQL Full-Text Search เพื่อให้ผู้ใช้สามารถค้นหาสูตรที่ต้องการได้อย่างรวดเร็วและแม่นยำ
 
 ## Epic Owner
+
 Development Team
 
 ## Dependencies
+
 - Epic 1: Project Setup & Infrastructure
 - Epic 3: Recipe Management (ต้องมีข้อมูลสูตรก่อน)
 
 ## Target Sprint/Timeline
+
 Sprint 7 (Week 9-10)
 
 ---
@@ -18,11 +22,13 @@ Sprint 7 (Week 9-10)
 ## User Stories
 
 ### Story 4.1: PostgreSQL Full-Text Search Setup
+
 **As a** developer,
 **I want** PostgreSQL full-text search configured for recipes,
 **so that** users can search recipes efficiently with text queries
 
 **Acceptance Criteria:**
+
 1. PostgreSQL extensions enabled:
    - `pg_trgm` (trigram similarity for fuzzy matching)
    - `unaccent` (optional, for accent-insensitive search)
@@ -39,6 +45,7 @@ Sprint 7 (Week 9-10)
 7. Test queries verify search functionality
 
 **Technical Notes:**
+
 - Use `tsvector` for full-text search
 - Use `pg_trgm` for similarity search (ILIKE queries)
 - Weight title higher than description in search ranking
@@ -48,11 +55,13 @@ Sprint 7 (Week 9-10)
 ---
 
 ### Story 4.2: Search API Enhancement
+
 **As a** user,
 **I want** to search recipes by keywords,
 **so that** I can quickly find recipes I'm interested in
 
 **Acceptance Criteria:**
+
 1. `GET /v1/recipes` endpoint enhanced with search:
    - Query parameter `q` (search query)
    - Search logic:
@@ -77,6 +86,7 @@ Sprint 7 (Week 9-10)
 6. Integration tests with sample data
 
 **Technical Notes:**
+
 - Use `@@` operator for tsvector matching
 - Use `ts_rank()` for relevance scoring
 - Use `similarity()` from pg_trgm for fuzzy matching
@@ -86,11 +96,13 @@ Sprint 7 (Week 9-10)
 ---
 
 ### Story 4.3: Advanced Filtering API
+
 **As a** user,
 **I want** to filter recipes by multiple criteria,
 **so that** I can find recipes that match my preferences
 
 **Acceptance Criteria:**
+
 1. `GET /v1/recipes` endpoint supports filters:
    - `category`: filter by category ID (single or multiple)
    - `maxTime`: filter by maximum cook time (minutes)
@@ -110,6 +122,7 @@ Sprint 7 (Week 9-10)
 5. Unit and integration tests cover filter combinations
 
 **Technical Notes:**
+
 - Use Prisma `where` clauses for filtering
 - Use `in` operator for multiple categories
 - Use `lte` for maxTime, `gte` for minRating
@@ -119,11 +132,13 @@ Sprint 7 (Week 9-10)
 ---
 
 ### Story 4.4: Search Page Frontend
+
 **As a** user,
 **I want** a dedicated search page with filters,
 **so that** I can easily find recipes matching my criteria
 
 **Acceptance Criteria:**
+
 1. Search page at `/search` (public):
    - Search bar:
      - Text input for search query
@@ -165,6 +180,7 @@ Sprint 7 (Week 9-10)
 6. Accessibility compliant
 
 **Technical Notes:**
+
 - Use React Query for search API calls
 - Use `useSearchParams` for URL state management
 - Debounce search input with `useDebouncedValue` or lodash
@@ -174,11 +190,13 @@ Sprint 7 (Week 9-10)
 ---
 
 ### Story 4.5: Homepage Search Integration
+
 **As a** user,
 **I want** a search bar on the homepage,
 **so that** I can quickly start searching without navigating to search page
 
 **Acceptance Criteria:**
+
 1. Search bar added to homepage hero section:
    - Prominent placement in hero
    - Text input with search icon
@@ -194,6 +212,7 @@ Sprint 7 (Week 9-10)
 5. Accessibility: proper labels, keyboard navigation
 
 **Technical Notes:**
+
 - Use Next.js router for navigation
 - Use shadcn/ui: Input, Button
 - Consider implementing autocomplete with debounced API call (Phase 2)
@@ -202,11 +221,13 @@ Sprint 7 (Week 9-10)
 ---
 
 ### Story 4.6: Dashboard Search & Filter
+
 **As a** logged-in user,
 **I want** to search and filter my own recipes on dashboard,
 **so that** I can quickly find recipes I created
 
 **Acceptance Criteria:**
+
 1. Dashboard "My Recipes" section enhanced:
    - Search bar above recipe grid
    - Filters: category, cook time
@@ -219,6 +240,7 @@ Sprint 7 (Week 9-10)
 5. Empty state: "You haven't created any recipes yet"
 
 **Technical Notes:**
+
 - Use same search/filter components as search page
 - Add `ownerId` filter to API call
 - Consider client-side filtering if user has < 50 recipes
@@ -227,6 +249,7 @@ Sprint 7 (Week 9-10)
 ---
 
 ## Epic Acceptance Criteria
+
 - [ ] All 6 stories completed and tested
 - [ ] Full-text search works on recipe titles and descriptions
 - [ ] Users can filter recipes by category and cook time
@@ -239,6 +262,7 @@ Sprint 7 (Week 9-10)
 - [ ] Unit and integration tests passing
 
 ## Technical Dependencies
+
 - Epic 1 and 3 completed
 - PostgreSQL pg_trgm extension
 - Prisma for database queries
@@ -246,6 +270,7 @@ Sprint 7 (Week 9-10)
 - Next.js router for navigation
 
 ## Performance Considerations
+
 - GIN and trigram indexes for fast search
 - Debounced search input to reduce API calls
 - Efficient query building with Prisma
@@ -253,6 +278,7 @@ Sprint 7 (Week 9-10)
 - Pagination to limit result size
 
 ## Risks & Mitigations
+
 - **Risk:** Search results not relevant
   - **Mitigation:** Tune search ranking weights, implement user feedback
 - **Risk:** Slow search with large dataset
@@ -261,6 +287,7 @@ Sprint 7 (Week 9-10)
   - **Mitigation:** User testing, clear labels, progressive disclosure
 
 ## Definition of Done
+
 - All stories meet acceptance criteria
 - Code reviewed and merged
 - Search indexes created and optimized

@@ -1,15 +1,19 @@
 # Epic 6: Testing & Deployment
 
 ## Epic Goal
+
 สร้างระบบ testing ที่ครอบคลุมและ deployment pipeline สำหรับ production เพื่อให้มั่นใจในคุณภาพของโค้ดและความพร้อมในการเปิดตัว MVP
 
 ## Epic Owner
+
 Development Team & DevOps
 
 ## Dependencies
+
 - Epic 1-5: ฟีเจอร์หลักทั้งหมดเสร็จสมบูรณ์
 
 ## Target Sprint/Timeline
+
 Sprint 10-11 (Week 13-15)
 
 ---
@@ -17,11 +21,13 @@ Sprint 10-11 (Week 13-15)
 ## User Stories
 
 ### Story 6.1: Unit Testing Setup & Core Tests
+
 **As a** developer,
 **I want** comprehensive unit tests for backend and frontend,
 **so that** I can ensure individual components work correctly
 
 **Acceptance Criteria:**
+
 1. Backend unit testing configured:
    - Jest configured for NestJS
    - Test files follow pattern: `*.spec.ts`
@@ -48,6 +54,7 @@ Sprint 10-11 (Week 13-15)
 6. CI integration (runs on every commit)
 
 **Technical Notes:**
+
 - Use Jest for backend (NestJS default)
 - Use Vitest for frontend (faster than Jest)
 - Mock external dependencies (database, APIs)
@@ -57,11 +64,13 @@ Sprint 10-11 (Week 13-15)
 ---
 
 ### Story 6.2: Integration Testing
+
 **As a** developer,
 **I want** integration tests for API endpoints,
 **so that** I can verify end-to-end API functionality
 
 **Acceptance Criteria:**
+
 1. Integration test setup:
    - Supertest configured for API testing
    - Test database configured (separate from dev DB)
@@ -80,6 +89,7 @@ Sprint 10-11 (Week 13-15)
 5. All tests passing
 
 **Technical Notes:**
+
 - Use Supertest for HTTP assertions
 - Use test database: `recipewire_test`
 - Reset database with Prisma: `prisma migrate reset --force`
@@ -89,11 +99,13 @@ Sprint 10-11 (Week 13-15)
 ---
 
 ### Story 6.3: E2E Testing with Playwright
+
 **As a** QA engineer,
 **I want** end-to-end tests for critical user flows,
 **so that** I can verify the entire application works from user perspective
 
 **Acceptance Criteria:**
+
 1. Playwright configured:
    - Playwright installed and configured
    - Test files in `e2e/` directory
@@ -122,6 +134,7 @@ Sprint 10-11 (Week 13-15)
 5. All E2E tests passing
 
 **Technical Notes:**
+
 - Use Playwright Test framework
 - Configure base URL: `http://localhost:3000`
 - Use Page Object Model for maintainability
@@ -131,11 +144,13 @@ Sprint 10-11 (Week 13-15)
 ---
 
 ### Story 6.4: Production Docker Setup
+
 **As a** DevOps engineer,
 **I want** production-ready Docker images and compose file,
 **so that** the application can be deployed to production
 
 **Acceptance Criteria:**
+
 1. Production Dockerfiles created:
    - `apps/backend/Dockerfile.prod`:
      - Multi-stage build (build → production)
@@ -172,6 +187,7 @@ Sprint 10-11 (Week 13-15)
    - All services healthy
 
 **Technical Notes:**
+
 - Use multi-stage builds to minimize image size
 - Use `.dockerignore` to exclude unnecessary files
 - Set NODE_ENV=production
@@ -181,11 +197,13 @@ Sprint 10-11 (Week 13-15)
 ---
 
 ### Story 6.5: CI/CD Pipeline Setup
+
 **As a** DevOps engineer,
 **I want** a CI/CD pipeline for automated testing and deployment,
 **so that** code changes are tested and deployed reliably
 
 **Acceptance Criteria:**
+
 1. CI pipeline configured (GitHub Actions or GitLab CI):
    - Triggers on: push to main, pull requests
    - Jobs:
@@ -218,6 +236,7 @@ Sprint 10-11 (Week 13-15)
 5. Pipeline runs successfully on test PR
 
 **Technical Notes:**
+
 - Use GitHub Actions or GitLab CI
 - Cache dependencies for faster builds
 - Use matrix strategy for parallel jobs
@@ -227,11 +246,13 @@ Sprint 10-11 (Week 13-15)
 ---
 
 ### Story 6.6: Production Deployment & Monitoring
+
 **As a** DevOps engineer,
 **I want** the application deployed to production with basic monitoring,
 **so that** users can access the MVP and issues can be detected
 
 **Acceptance Criteria:**
+
 1. Production server setup:
    - VPS or cloud instance provisioned (e.g., DigitalOcean, AWS EC2)
    - Docker and Docker Compose installed
@@ -260,6 +281,7 @@ Sprint 10-11 (Week 13-15)
 7. Smoke tests pass on production
 
 **Technical Notes:**
+
 - Use Let's Encrypt with Certbot for SSL
 - Use logrotate for log management
 - Use cron for backup automation
@@ -269,11 +291,13 @@ Sprint 10-11 (Week 13-15)
 ---
 
 ### Story 6.7: Performance Testing & Optimization
+
 **As a** developer,
 **I want** to verify application performance meets targets,
 **so that** users have a fast and responsive experience
 
 **Acceptance Criteria:**
+
 1. Performance benchmarks defined:
    - Homepage load time: < 2 seconds (First Contentful Paint)
    - Recipe detail page load: < 2 seconds
@@ -299,6 +323,7 @@ Sprint 10-11 (Week 13-15)
    - Performance metrics logged
 
 **Technical Notes:**
+
 - Use Lighthouse CI in GitHub Actions
 - Use k6 for load testing (write test scripts)
 - Use Prisma query logging to identify slow queries
@@ -308,6 +333,7 @@ Sprint 10-11 (Week 13-15)
 ---
 
 ## Epic Acceptance Criteria
+
 - [ ] All 7 stories completed and tested
 - [ ] Unit test coverage: Backend 80%+, Frontend 70%+
 - [ ] Integration tests cover all API endpoints
@@ -320,6 +346,7 @@ Sprint 10-11 (Week 13-15)
 - [ ] Documentation complete (deployment, monitoring, rollback)
 
 ## Technical Dependencies
+
 - All previous epics (1-5) completed
 - Jest, Vitest, Playwright for testing
 - Docker and Docker Compose for deployment
@@ -329,6 +356,7 @@ Sprint 10-11 (Week 13-15)
 - SSL certificate (Let's Encrypt)
 
 ## Quality Gates
+
 - All tests must pass before merge to main
 - Code coverage thresholds enforced
 - Lighthouse performance score > 90
@@ -336,6 +364,7 @@ Sprint 10-11 (Week 13-15)
 - Manual QA approval before production deployment
 
 ## Risks & Mitigations
+
 - **Risk:** Deployment issues on production
   - **Mitigation:** Test deployment on staging environment first, have rollback plan
 - **Risk:** Performance degradation under load
@@ -344,6 +373,7 @@ Sprint 10-11 (Week 13-15)
   - **Mitigation:** Automated backups, test restore procedure, database migration testing
 
 ## Definition of Done
+
 - All stories meet acceptance criteria
 - Code reviewed and merged
 - All tests passing (unit, integration, E2E)
@@ -362,6 +392,7 @@ Sprint 10-11 (Week 13-15)
 ## 🎉 MVP Launch Checklist
 
 After Epic 6 completion, verify:
+
 - [ ] All 6 epics completed
 - [ ] All acceptance criteria met
 - [ ] Production deployment successful

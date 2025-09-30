@@ -130,6 +130,7 @@ apps/backend/
 ### Backend Module Pattern
 
 Each module follows this structure:
+
 ```
 module-name/
 ├── module-name.controller.ts   # HTTP endpoints
@@ -277,6 +278,7 @@ components/
 ## 📦 Shared Packages
 
 ### `packages/types/`
+
 ```
 packages/types/
 ├── src/
@@ -295,6 +297,7 @@ packages/types/
 ```
 
 ### `packages/utils/`
+
 ```
 packages/utils/
 ├── src/
@@ -312,6 +315,7 @@ packages/utils/
 ```
 
 ### `packages/ui/` (Future)
+
 ```
 packages/ui/
 ├── src/
@@ -382,6 +386,7 @@ docs/
 ## 🐳 Docker Structure
 
 ### Development
+
 ```
 docker-compose.yml             # Development setup
 ├── db (PostgreSQL)
@@ -390,6 +395,7 @@ docker-compose.yml             # Development setup
 ```
 
 ### Production
+
 ```
 docker-compose.prod.yml        # Production setup
 ├── db (PostgreSQL)
@@ -403,6 +409,7 @@ docker-compose.prod.yml        # Production setup
 ## 🔧 Configuration Files
 
 ### Root Level
+
 - `package.json` - Workspace configuration
 - `pnpm-workspace.yaml` - pnpm workspace definition
 - `tsconfig.json` - Base TypeScript config
@@ -412,6 +419,7 @@ docker-compose.prod.yml        # Production setup
 - `.dockerignore` - Docker ignore rules
 
 ### App Level
+
 - `apps/*/package.json` - App-specific dependencies
 - `apps/*/tsconfig.json` - App-specific TypeScript config
 - `apps/*/.env.example` - Environment variables template
@@ -421,12 +429,14 @@ docker-compose.prod.yml        # Production setup
 ## 📝 Naming Conventions
 
 ### Files
+
 - **Components:** `kebab-case.tsx` (e.g., `recipe-card.tsx`)
 - **Utilities:** `kebab-case.ts` (e.g., `format-date.ts`)
 - **Tests:** `*.test.ts` or `*.spec.ts`
 - **Types:** `*.types.ts` or `*.schemas.ts`
 
 ### Folders
+
 - **Modules:** `kebab-case` (e.g., `auth/`, `recipes/`)
 - **Route Groups:** `(group-name)` in Next.js App Router
 
@@ -435,6 +445,7 @@ docker-compose.prod.yml        # Production setup
 ## 🚀 Import Path Aliases
 
 ### Backend (`apps/backend/`)
+
 ```typescript
 import { User } from '@prisma/client'
 import { CreateRecipeDto } from '@recipe-wire/types'
@@ -443,6 +454,7 @@ import { RecipeService } from './recipe.service'
 ```
 
 ### Frontend (`apps/frontend/`)
+
 ```typescript
 import { Button } from '@/components/ui/button'
 import { RecipeCard } from '@/components/recipe/recipe-card'
@@ -452,6 +464,7 @@ import { formatDate } from '@recipe-wire/utils'
 ```
 
 ### Path Alias Configuration
+
 ```json
 // tsconfig.json
 {
@@ -479,6 +492,7 @@ import { formatDate } from '@recipe-wire/utils'
 ## 🔍 Finding Files
 
 ### By Feature
+
 ```bash
 # Auth-related files
 apps/backend/src/auth/
@@ -493,6 +507,7 @@ packages/types/src/recipe/
 ```
 
 ### By Type
+
 ```bash
 # All controllers
 find apps/backend/src -name "*.controller.ts"

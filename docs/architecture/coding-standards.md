@@ -17,6 +17,7 @@
 ## 📁 File Naming Conventions
 
 ### General Rules
+
 - ใช้ **kebab-case** สำหรับไฟล์และโฟลเดอร์
 - ใช้ **PascalCase** สำหรับ React components และ classes
 - ใช้ **camelCase** สำหรับ functions และ variables
@@ -38,15 +39,15 @@ hooks/UseAuth.ts (ควรใช้ kebab-case)
 
 ### File Suffixes
 
-| Type | Suffix | Example |
-|------|--------|---------|
-| React Component | `.tsx` | `recipe-card.tsx` |
-| TypeScript File | `.ts` | `format-date.ts` |
-| Test File (Unit) | `.test.ts(x)` | `recipe-card.test.tsx` |
+| Type                    | Suffix                 | Example                      |
+| ----------------------- | ---------------------- | ---------------------------- |
+| React Component         | `.tsx`                 | `recipe-card.tsx`            |
+| TypeScript File         | `.ts`                  | `format-date.ts`             |
+| Test File (Unit)        | `.test.ts(x)`          | `recipe-card.test.tsx`       |
 | Test File (Integration) | `.integration.spec.ts` | `recipe.integration.spec.ts` |
-| Type Definitions | `.types.ts` | `recipe.types.ts` |
-| Constants | `.constants.ts` | `api.constants.ts` |
-| Config | `.config.ts` | `database.config.ts` |
+| Type Definitions        | `.types.ts`            | `recipe.types.ts`            |
+| Constants               | `.constants.ts`        | `api.constants.ts`           |
+| Config                  | `.config.ts`           | `database.config.ts`         |
 
 ---
 
@@ -55,6 +56,7 @@ hooks/UseAuth.ts (ควรใช้ kebab-case)
 ### TypeScript
 
 #### Imports Order
+
 ```typescript
 // 1. External dependencies
 import { Injectable } from '@nestjs/common'
@@ -73,6 +75,7 @@ import type { Recipe } from '@prisma/client'
 ```
 
 #### Export Order
+
 ```typescript
 // 1. Types and interfaces
 export type RecipeStatus = 'draft' | 'published'
@@ -93,6 +96,7 @@ export class RecipeService { ... }
 ## 🎨 Naming Conventions
 
 ### Variables and Functions
+
 ```typescript
 // ✅ Good - camelCase
 const userId = '123'
@@ -109,24 +113,26 @@ function GetUserById(id: string) { ... }  // Should be camelCase
 ```
 
 ### Constants
+
 ```typescript
 // ✅ Good - UPPER_SNAKE_CASE for true constants
-const MAX_FILE_SIZE = 3 * 1024 * 1024  // 3 MB
+const MAX_FILE_SIZE = 3 * 1024 * 1024 // 3 MB
 const API_BASE_URL = '/api/v1'
 const DEFAULT_PAGE_SIZE = 20
 
 // ✅ Good - camelCase for config objects
 const apiConfig = {
   baseUrl: '/api/v1',
-  timeout: 5000
+  timeout: 5000,
 }
 
 // ❌ Bad
-const maxFileSize = 3 * 1024 * 1024  // Should be UPPER_SNAKE_CASE
-const Max_File_Size = 3 * 1024 * 1024  // Inconsistent
+const maxFileSize = 3 * 1024 * 1024 // Should be UPPER_SNAKE_CASE
+const Max_File_Size = 3 * 1024 * 1024 // Inconsistent
 ```
 
 ### Classes and Interfaces
+
 ```typescript
 // ✅ Good - PascalCase
 class RecipeService { ... }
@@ -139,6 +145,7 @@ interface createRecipeDto { ... }  // Should be PascalCase
 ```
 
 ### React Components
+
 ```typescript
 // ✅ Good - PascalCase
 export function RecipeCard({ recipe }: RecipeCardProps) { ... }
@@ -150,6 +157,7 @@ export const recipe_list = ({ recipes }) => { ... }
 ```
 
 ### Boolean Variables
+
 ```typescript
 // ✅ Good - Use is/has/can prefix
 const isLoading = true
@@ -158,9 +166,9 @@ const canEdit = true
 const shouldRefetch = false
 
 // ❌ Bad
-const loading = true  // Ambiguous
-const permission = false  // Not clear it's boolean
-const edit = true  // Not descriptive
+const loading = true // Ambiguous
+const permission = false // Not clear it's boolean
+const edit = true // Not descriptive
 ```
 
 ---
@@ -168,6 +176,7 @@ const edit = true  // Not descriptive
 ## 🔤 TypeScript Best Practices
 
 ### Strict Mode
+
 ```typescript
 // tsconfig.json
 {
@@ -183,6 +192,7 @@ const edit = true  // Not descriptive
 ```
 
 ### Avoid `any`
+
 ```typescript
 // ❌ Bad
 function processData(data: any) {
@@ -208,11 +218,12 @@ function processData(data: unknown) {
 ```
 
 ### Use Type Inference
+
 ```typescript
 // ✅ Good - Let TypeScript infer
-const count = 10  // inferred as number
-const name = 'John'  // inferred as string
-const recipe = await getRecipe(id)  // inferred from return type
+const count = 10 // inferred as number
+const name = 'John' // inferred as string
+const recipe = await getRecipe(id) // inferred from return type
 
 // ❌ Bad - Unnecessary type annotation
 const count: number = 10
@@ -220,6 +231,7 @@ const name: string = 'John'
 ```
 
 ### Prefer Interfaces for Objects
+
 ```typescript
 // ✅ Good - Use interface for object shapes
 interface User {
@@ -241,6 +253,7 @@ type User = {
 ```
 
 ### Use Enums Sparingly
+
 ```typescript
 // ✅ Good - Use string literal unions instead of enums
 type RecipeStatus = 'draft' | 'published' | 'archived'
@@ -249,14 +262,14 @@ type RecipeStatus = 'draft' | 'published' | 'archived'
 enum RecipeStatus {
   Draft = 'draft',
   Published = 'published',
-  Archived = 'archived'
+  Archived = 'archived',
 }
 
 // ✅ OK - Use const enums if you must
 const enum HttpStatus {
   OK = 200,
   BadRequest = 400,
-  Unauthorized = 401
+  Unauthorized = 401,
 }
 ```
 
@@ -265,6 +278,7 @@ const enum HttpStatus {
 ## ⚛️ React Best Practices
 
 ### Component Structure
+
 ```tsx
 // ✅ Good - Clear structure
 import { useState } from 'react'
@@ -294,6 +308,7 @@ export function RecipeCard({ recipe, onEdit, onDelete }: RecipeCardProps) {
 ```
 
 ### Props Naming
+
 ```tsx
 // ✅ Good - Use on* for event handlers
 interface RecipeFormProps {
@@ -304,22 +319,31 @@ interface RecipeFormProps {
 
 // ❌ Bad
 interface RecipeFormProps {
-  submit: (data: CreateRecipeDto) => void  // Not clear it's a handler
-  handleCancel: () => void  // Redundant "handle"
+  submit: (data: CreateRecipeDto) => void // Not clear it's a handler
+  handleCancel: () => void // Redundant "handle"
 }
 ```
 
 ### Conditional Rendering
+
 ```tsx
 // ✅ Good - Use && for simple conditions
-{isLoading && <Spinner />}
-{error && <ErrorMessage error={error} />}
+{
+  isLoading && <Spinner />
+}
+{
+  error && <ErrorMessage error={error} />
+}
 
 // ✅ Good - Use ternary for if-else
-{isAuthenticated ? <Dashboard /> : <Login />}
+{
+  isAuthenticated ? <Dashboard /> : <Login />
+}
 
 // ❌ Bad - Don't use ternary for single condition
-{isLoading ? <Spinner /> : null}  // Use && instead
+{
+  isLoading ? <Spinner /> : null
+} // Use && instead
 
 // ✅ Good - Use early return for complex conditions
 if (!recipe) {
@@ -330,12 +354,13 @@ return <RecipeDetail recipe={recipe} />
 ```
 
 ### Hooks Rules
+
 ```tsx
 // ✅ Good - Hooks at top level
 function RecipeList() {
   const [recipes, setRecipes] = useState<Recipe[]>([])
   const { data, isLoading } = useQuery('recipes', fetchRecipes)
-  
+
   useEffect(() => {
     // Effect logic
   }, [])
@@ -346,7 +371,7 @@ function RecipeList() {
 // ❌ Bad - Hooks in conditions
 function RecipeList() {
   if (someCondition) {
-    const [recipes, setRecipes] = useState<Recipe[]>([])  // ❌ Wrong!
+    const [recipes, setRecipes] = useState<Recipe[]>([]) // ❌ Wrong!
   }
 }
 
@@ -363,18 +388,20 @@ function useAuth() {
 ## 🏛️ NestJS Best Practices
 
 ### Module Structure
+
 ```typescript
 // ✅ Good - Clear separation of concerns
 @Module({
   imports: [PrismaModule],
   controllers: [RecipeController],
   providers: [RecipeService, RecipeRepository],
-  exports: [RecipeService]
+  exports: [RecipeService],
 })
 export class RecipeModule {}
 ```
 
 ### Controller
+
 ```typescript
 // ✅ Good - RESTful routes, DTO validation
 @Controller('recipes')
@@ -398,6 +425,7 @@ export class RecipeController {
 ```
 
 ### Service
+
 ```typescript
 // ✅ Good - Business logic in service
 @Injectable()
@@ -409,19 +437,19 @@ export class RecipeService {
 
   async create(dto: CreateRecipeDto, ownerId: string): Promise<Recipe> {
     this.logger.log(`Creating recipe: ${dto.title}`)
-    
+
     return this.prisma.recipe.create({
       data: {
         ...dto,
         ownerId,
         ingredients: {
-          create: dto.ingredients.map(label => ({ label }))
-        }
+          create: dto.ingredients.map(label => ({ label })),
+        },
       },
       include: {
         ingredients: true,
-        steps: true
-      }
+        steps: true,
+      },
     })
   }
 
@@ -431,8 +459,8 @@ export class RecipeService {
       include: {
         owner: true,
         ingredients: true,
-        steps: true
-      }
+        steps: true,
+      },
     })
 
     if (!recipe) {
@@ -445,6 +473,7 @@ export class RecipeService {
 ```
 
 ### Error Handling
+
 ```typescript
 // ✅ Good - Use NestJS exceptions
 throw new NotFoundException('Recipe not found')
@@ -453,7 +482,7 @@ throw new UnauthorizedException('Not authenticated')
 throw new ForbiddenException('Not authorized to edit this recipe')
 
 // ❌ Bad - Don't throw generic errors
-throw new Error('Recipe not found')  // Use NotFoundException
+throw new Error('Recipe not found') // Use NotFoundException
 ```
 
 ---
@@ -461,6 +490,7 @@ throw new Error('Recipe not found')  // Use NotFoundException
 ## 🧪 Testing Standards
 
 ### Test File Structure
+
 ```typescript
 // recipe.service.spec.ts
 describe('RecipeService', () => {
@@ -480,14 +510,14 @@ describe('RecipeService', () => {
     it('should create a recipe', async () => {
       const dto = { title: 'Test Recipe', ... }
       const result = await service.create(dto, 'user-id')
-      
+
       expect(result).toBeDefined()
       expect(result.title).toBe('Test Recipe')
     })
 
     it('should throw BadRequestException for invalid data', async () => {
       const dto = { title: '', ... }
-      
+
       await expect(service.create(dto, 'user-id'))
         .rejects.toThrow(BadRequestException)
     })
@@ -496,6 +526,7 @@ describe('RecipeService', () => {
 ```
 
 ### Test Naming
+
 ```typescript
 // ✅ Good - Descriptive test names
 it('should return 404 when recipe not found')
@@ -513,6 +544,7 @@ it('should pass')
 ## 💅 Code Formatting
 
 ### Prettier Configuration
+
 ```json
 {
   "semi": false,
@@ -525,6 +557,7 @@ it('should pass')
 ```
 
 ### ESLint Rules
+
 ```json
 {
   "extends": [
@@ -548,6 +581,7 @@ it('should pass')
 ## 📝 Comments and Documentation
 
 ### When to Comment
+
 ```typescript
 // ✅ Good - Explain WHY, not WHAT
 // Use bcrypt cost factor 10 for balance between security and performance
@@ -566,10 +600,11 @@ for (const recipe of recipes) { ... }
 ```
 
 ### JSDoc for Public APIs
+
 ```typescript
 /**
  * Creates a new recipe with ingredients and steps
- * 
+ *
  * @param dto - Recipe creation data
  * @param ownerId - ID of the user creating the recipe
  * @returns Created recipe with all relations
@@ -582,6 +617,7 @@ async create(dto: CreateRecipeDto, ownerId: string): Promise<Recipe> {
 ```
 
 ### TODO Comments
+
 ```typescript
 // TODO: Implement caching for popular recipes
 // TODO(username): Add pagination support
@@ -594,6 +630,7 @@ async create(dto: CreateRecipeDto, ownerId: string): Promise<Recipe> {
 ## 🚫 Anti-Patterns to Avoid
 
 ### Magic Numbers
+
 ```typescript
 // ❌ Bad
 if (user.age > 18) { ... }
@@ -608,6 +645,7 @@ setTimeout(callback, FIVE_MINUTES_MS)
 ```
 
 ### Deep Nesting
+
 ```typescript
 // ❌ Bad
 if (user) {
@@ -630,6 +668,7 @@ if (recipe.ownerId !== user.id) return
 ```
 
 ### Large Functions
+
 ```typescript
 // ❌ Bad - Function does too much
 async function handleRecipeSubmit(data: any) {
@@ -650,6 +689,7 @@ async function handleRecipeSubmit(data: FormData) {
 ## 🔒 Security Best Practices
 
 ### Input Validation
+
 ```typescript
 // ✅ Good - Validate all inputs
 const CreateRecipeSchema = z.object({
@@ -666,10 +706,11 @@ async create(@Body(new ZodValidationPipe(CreateRecipeSchema)) dto: CreateRecipeD
 ```
 
 ### SQL Injection Prevention
+
 ```typescript
 // ✅ Good - Use Prisma (parameterized queries)
 const recipe = await prisma.recipe.findUnique({
-  where: { id: recipeId }
+  where: { id: recipeId },
 })
 
 // ❌ Bad - Never use raw SQL with user input
@@ -677,6 +718,7 @@ const recipe = await prisma.$queryRaw`SELECT * FROM recipes WHERE id = ${recipeI
 ```
 
 ### XSS Prevention
+
 ```typescript
 // ✅ Good - Sanitize HTML content
 import DOMPurify from 'dompurify'
@@ -685,12 +727,13 @@ const sanitizedDescription = DOMPurify.sanitize(recipe.description)
 ```
 
 ### Secrets Management
+
 ```typescript
 // ✅ Good - Use environment variables
 const jwtSecret = process.env.JWT_SECRET
 
 // ❌ Bad - Never hardcode secrets
-const jwtSecret = 'my-secret-key-123'  // ❌ NEVER DO THIS!
+const jwtSecret = 'my-secret-key-123' // ❌ NEVER DO THIS!
 ```
 
 ---

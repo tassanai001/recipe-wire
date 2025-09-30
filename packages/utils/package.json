@@ -1,0 +1,19 @@
+{
+  "name": "@recipe-wire/utils",
+  "version": "1.0.0",
+  "description": "Shared utilities for RecipeWire",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "utilities",
+    "helpers",
+    "recipe-wire"
+  ],
+  "author": "RecipeWire Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

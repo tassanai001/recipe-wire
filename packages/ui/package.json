@@ -1,0 +1,21 @@
+{
+  "name": "@recipe-wire/ui",
+  "version": "1.0.0",
+  "description": "Shared UI components for RecipeWire",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "ui",
+    "components",
+    "recipe-wire"
+  ],
+  "author": "RecipeWire Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.3.25",
+    "react": "^18.3.1",
+    "typescript": "^5.0.0"
+  }
+}

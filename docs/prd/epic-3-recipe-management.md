@@ -1,16 +1,20 @@
 # Epic 3: Recipe Management
 
 ## Epic Goal
+
 สร้างระบบจัดการสูตรอาหารที่สมบูรณ์ รวมถึง CRUD operations, image upload, และ UI สำหรับสร้าง แก้ไข และแสดงสูตรอาหาร เพื่อให้ผู้ใช้สามารถแชร์และจัดการสูตรอาหารได้
 
 ## Epic Owner
+
 Development Team
 
 ## Dependencies
+
 - Epic 1: Project Setup & Infrastructure
 - Epic 2: Authentication & User System
 
 ## Target Sprint/Timeline
+
 Sprint 4-6 (Week 5-8)
 
 ---
@@ -18,11 +22,13 @@ Sprint 4-6 (Week 5-8)
 ## User Stories
 
 ### Story 3.1: Recipe Data Model & Database Schema
+
 **As a** developer,
 **I want** a complete recipe data model with all relationships,
 **so that** I can store and query recipe data efficiently
 
 **Acceptance Criteria:**
+
 1. Prisma schema updated with recipe-related models:
    - `Recipe` model with fields:
      - id (UUID, PK)
@@ -67,6 +73,7 @@ Sprint 4-6 (Week 5-8)
 6. Seed data script with sample categories
 
 **Technical Notes:**
+
 - Use UUID v4 for all primary keys
 - Cascade delete for dependent records (steps, ingredients)
 - Index strategy optimized for common queries
@@ -75,11 +82,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.2: Recipe Creation API
+
 **As a** logged-in user,
 **I want** to create a new recipe via API,
 **so that** I can share my recipes with others
 
 **Acceptance Criteria:**
+
 1. `POST /v1/recipes` endpoint created (protected)
 2. Request body validation:
    - title: required, 3-200 characters
@@ -106,6 +115,7 @@ Sprint 4-6 (Week 5-8)
 7. Integration test verifies database records
 
 **Technical Notes:**
+
 - Use Prisma transactions for atomic creation
 - Validate category IDs exist before linking
 - Return recipe with nested ingredients, steps, categories
@@ -114,11 +124,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.3: Recipe Read & List APIs
+
 **As a** user,
 **I want** to view recipe details and browse recipes,
 **so that** I can discover and learn new recipes
 
 **Acceptance Criteria:**
+
 1. `GET /v1/recipes/:id` endpoint created (public):
    - Returns complete recipe with:
      - All recipe fields
@@ -152,6 +164,7 @@ Sprint 4-6 (Week 5-8)
 5. Unit and integration tests cover all query combinations
 
 **Technical Notes:**
+
 - Use Prisma `include` for nested relations
 - Implement cursor-based pagination for better performance (optional)
 - Use `ts_vector` for full-text search
@@ -160,11 +173,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.4: Recipe Update & Delete APIs
+
 **As a** recipe owner,
 **I want** to update or delete my recipes,
 **so that** I can keep my content accurate and remove unwanted recipes
 
 **Acceptance Criteria:**
+
 1. `PATCH /v1/recipes/:id` endpoint created (protected):
    - Only recipe owner can update
    - Updatable fields:
@@ -193,6 +208,7 @@ Sprint 4-6 (Week 5-8)
 5. Integration tests verify updates and deletions
 
 **Technical Notes:**
+
 - Use Prisma transactions for update operations
 - Ownership check: `recipe.ownerId === request.user.id`
 - Cascade delete configured in Prisma schema
@@ -201,11 +217,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.5: Image Upload API Enhancement
+
 **As a** user,
 **I want** to upload recipe images,
 **so that** I can make my recipes visually appealing
 
 **Acceptance Criteria:**
+
 1. `POST /v1/uploads` endpoint enhanced (protected):
    - Accepts multipart/form-data with `file` field
    - Validates:
@@ -232,6 +250,7 @@ Sprint 4-6 (Week 5-8)
 6. Integration test uploads actual files
 
 **Technical Notes:**
+
 - Use `multer` for file handling
 - Use `sharp` for image optimization (optional)
 - Validate MIME type and file extension
@@ -241,11 +260,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.6: Recipe Creation Frontend Page
+
 **As a** logged-in user,
 **I want** an intuitive form to create recipes,
 **so that** I can easily share my recipes
 
 **Acceptance Criteria:**
+
 1. Recipe creation page at `/recipes/new` (protected):
    - Form fields:
      - Title (text input, required)
@@ -280,6 +301,7 @@ Sprint 4-6 (Week 5-8)
 4. Auto-save draft to localStorage (optional)
 
 **Technical Notes:**
+
 - Use shadcn/ui: Form, Input, Textarea, Button, Select
 - Use React Hook Form with Zod validation
 - Use React Query mutation for API calls
@@ -289,11 +311,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.7: Recipe Detail Frontend Page
+
 **As a** user,
 **I want** to view complete recipe details,
 **so that** I can follow the recipe and learn how to cook it
 
 **Acceptance Criteria:**
+
 1. Recipe detail page at `/recipes/[id]` (public):
    - Display all recipe information:
      - Cover image (large, responsive)
@@ -320,6 +344,7 @@ Sprint 4-6 (Week 5-8)
 6. SEO optimized (meta tags, structured data)
 
 **Technical Notes:**
+
 - Use Next.js dynamic route: `app/recipes/[id]/page.tsx`
 - Use React Query for data fetching
 - Use shadcn/ui: Card, Badge, Button, AlertDialog (for delete confirmation)
@@ -329,11 +354,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.8: Recipe List & Dashboard Frontend
+
 **As a** user,
 **I want** to browse recipes on the homepage and dashboard,
 **so that** I can discover new recipes
 
 **Acceptance Criteria:**
+
 1. Homepage at `/` (public):
    - Hero section with app description and CTA
    - "Latest Recipes" section:
@@ -359,6 +386,7 @@ Sprint 4-6 (Week 5-8)
 6. Empty states with helpful messages
 
 **Technical Notes:**
+
 - Use React Query with pagination/infinite query
 - Use shadcn/ui: Card, Button, Skeleton
 - Implement recipe card as reusable component
@@ -368,11 +396,13 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ### Story 3.9: Recipe Edit Frontend Page
+
 **As a** recipe owner,
 **I want** to edit my existing recipes,
 **so that** I can update or correct information
 
 **Acceptance Criteria:**
+
 1. Recipe edit page at `/recipes/[id]/edit` (protected):
    - Only accessible by recipe owner (403 otherwise)
    - Form pre-filled with existing recipe data:
@@ -391,6 +421,7 @@ Sprint 4-6 (Week 5-8)
 4. Responsive and accessible
 
 **Technical Notes:**
+
 - Use same form component as creation (with edit mode)
 - Fetch recipe data on page load
 - Pre-populate form with `reset()` from React Hook Form
@@ -400,6 +431,7 @@ Sprint 4-6 (Week 5-8)
 ---
 
 ## Epic Acceptance Criteria
+
 - [ ] All 9 stories completed and tested
 - [ ] Users can create recipes with ingredients, steps, images, and categories
 - [ ] Users can view recipe details with all information
@@ -412,6 +444,7 @@ Sprint 4-6 (Week 5-8)
 - [ ] Performance acceptable (page load < 2s)
 
 ## Technical Dependencies
+
 - Epic 1 and 2 completed
 - Prisma for database operations
 - Multer for file uploads
@@ -420,6 +453,7 @@ Sprint 4-6 (Week 5-8)
 - Next.js Image component for optimization
 
 ## Performance Considerations
+
 - Database indexes on frequently queried fields
 - Efficient queries with proper joins
 - Image optimization and lazy loading
@@ -427,12 +461,14 @@ Sprint 4-6 (Week 5-8)
 - Caching for popular queries (Phase 2)
 
 ## Risks & Mitigations
+
 - **Risk:** Large images slow down page load
   - **Mitigation:** Implement image optimization, lazy loading, CDN (Phase 2)
 - **Risk:** Complex forms confuse users
   - **Mitigation:** Clear instructions, inline validation, preview functionality
 
 ## Definition of Done
+
 - All stories meet acceptance criteria
 - Code reviewed and merged
 - Unit tests: 80%+ coverage

@@ -34,7 +34,7 @@
    - Automatically updates Recipe.avgRating and Recipe.ratingsCount
    - Trigger function calculates:
      - avgRating = AVG(rating) from all reviews
-     - ratingsCount = COUNT(*) of reviews
+     - ratingsCount = COUNT(\*) of reviews
 4. Database indexes:
    - Review.recipeId (for fetching recipe reviews)
    - Review.userId (for user's reviews)
