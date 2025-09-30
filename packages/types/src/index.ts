@@ -1,7 +1,7 @@
-// Placeholder export for @recipe-wire/types
-// This package will contain shared TypeScript types and Zod schemas
+// Shared types and Zod schemas for the RecipeWire application
+import { z } from 'zod'
 
-// Example type - will be replaced with actual types in later stories
+// Recipe types (existing)
 export interface Recipe {
   id: string
   title: string
@@ -13,9 +13,6 @@ export interface Recipe {
   createdAt: Date
   updatedAt: Date
 }
-
-// Example Zod schema - will be replaced with actual schemas in later stories
-import { z } from 'zod'
 
 export const RecipeSchema = z.object({
   id: z.string().uuid(),
@@ -30,5 +27,9 @@ export const RecipeSchema = z.object({
 })
 
 export type RecipeType = z.infer<typeof RecipeSchema>
+
+// Auth types and schemas (new)
+export * from './auth/user.types'
+export * from './auth/auth.schemas'
 
 // Additional exports will be added in later stories based on requirements

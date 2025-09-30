@@ -25,6 +25,8 @@ model User {
   passwordHash String
   /// Display name shown to other users
   displayName  String
+  /// Optional bio for the user
+  bio          String?
   /// URL for the user's avatar image
   avatarUrl    String?
   /// Timestamp when the user account was created

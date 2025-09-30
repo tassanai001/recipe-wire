@@ -5,6 +5,7 @@ import appConfig from './config/app.config';
 import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { UploadsModule } from './uploads/uploads.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { UploadsModule } from './uploads/uploads.module';
     
     // Uploads module
     UploadsModule,
+    
+    AuthModule,
   ],
   controllers: [],
   providers: [],

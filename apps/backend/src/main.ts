@@ -4,9 +4,13 @@ import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { Logger } from 'nestjs-pino';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
+
+  // Set global API version prefix
+  app.setGlobalPrefix('v1');
 
   // Use Pino logger
   app.useLogger(app.get(Logger));
@@ -19,6 +23,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Global exception filter
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // Use class-validator with NestJS container
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
@@ -44,5 +51,6 @@ async function bootstrap() {
   console.log(`🚀 API running on http://localhost:${port}`);
   console.log(`📊 Health check: http://localhost:${port}/health`);
   console.log(`📁 Uploads served at http://localhost:${port}/uploads/`);
+  console.log(`📋 API endpoints available at http://localhost:${port}/v1`);
 }
 bootstrap();
