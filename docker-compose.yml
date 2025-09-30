@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: recipewire_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: recipewire
+      POSTGRES_PASSWORD: dev_password_change_in_prod
+      POSTGRES_DB: recipewire_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recipewire"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - recipewire-network
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: recipewire_api
+    restart: unless-stopped
+    working_dir: /app
+    command: sh -c "pnpm install && pnpm run dev"
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/backend:/app
+      - /app/node_modules
+      - ./uploads:/var/app/uploads
+    environment:
+      DATABASE_URL: postgresql://recipewire:dev_password_change_in_prod@db:5432/recipewire_dev
+      NODE_ENV: development
+      PORT: 3001
+      JWT_SECRET: your-jwt-secret-change-in-prod
+      JWT_REFRESH_SECRET: your-refresh-secret-change-in-prod
+      JWT_ACCESS_EXPIRATION: 15m
+      JWT_REFRESH_EXPIRATION: 7d
+      UPLOAD_PATH: /var/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - recipewire-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: recipewire_frontend
+    restart: unless-stopped
+    working_dir: /app
+    command: sh -c "pnpm install && pnpm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/frontend:/app
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    depends_on:
+      - api
+    networks:
+      - recipewire-network
+
+volumes:
+  postgres_data:
+
+networks:
+  recipewire-network:
+    driver: bridge
