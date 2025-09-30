@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp"), pg_trgm]
+}
+
+/// Model representing a user in the RecipeWire application
+model User {
+  /// Unique identifier for the user, using UUID
+  id           String   @id @default(uuid()) @db.Uuid
+  /// User's email address, must be unique
+  email        String   @unique
+  /// Hashed password for authentication
+  passwordHash String
+  /// Display name shown to other users
+  displayName  String
+  /// URL for the user's avatar image
+  avatarUrl    String?
+  /// Timestamp when the user account was created
+  createdAt    DateTime @default(now())
+  /// Timestamp when the user account was last updated
+  updatedAt    DateTime @updatedAt
+
+  /// Create an index on the email field for faster lookups
+  @@index([email])
+  /// Map the model name to the database table name
+  @@map("users")
+}
