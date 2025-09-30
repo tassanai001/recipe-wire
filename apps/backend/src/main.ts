@@ -3,9 +3,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { Logger } from 'nestjs-pino';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
 
   // Use Pino logger
   app.useLogger(app.get(Logger));
@@ -28,6 +29,12 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Serve static files
+  const uploadPath = process.env.UPLOAD_PATH || './uploads';
+  app.useStaticAssets(uploadPath, {
+    prefix: '/uploads/',
+  });
+
   // Shutdown hooks
   app.enableShutdownHooks();
 
@@ -36,5 +43,6 @@ async function bootstrap() {
 
   console.log(`🚀 API running on http://localhost:${port}`);
   console.log(`📊 Health check: http://localhost:${port}/health`);
+  console.log(`📁 Uploads served at http://localhost:${port}/uploads/`);
 }
 bootstrap();

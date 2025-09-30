@@ -59,5 +59,7 @@ Thumbs.db
 !Dockerfile
 
 # Sensitive or large files
-uploads/
+/uploads/*
+!/uploads/.gitkeep
+!/uploads/*/.gitkeep
 secret/
