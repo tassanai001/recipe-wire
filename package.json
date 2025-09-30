@@ -20,12 +20,18 @@
   "author": "RecipeWire Team",
   "license": "MIT",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "prettier": "^3.0.0",
+    "prisma": "^6.16.2",
     "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
   },
-  "packageManager": "pnpm@8.15.0"
+  "packageManager": "pnpm@8.15.0",
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "bcrypt": "^6.0.0"
+  }
 }
