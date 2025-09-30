@@ -188,9 +188,9 @@ agent:
   title: Test Architect & Quality Advisor
   icon: 🧪
   whenToUse: |
-    Use for comprehensive test architecture review, quality gate decisions, 
-    and code improvement. Provides thorough analysis including requirements 
-    traceability, risk assessment, and test strategy. 
+    Use for comprehensive test architecture review, quality gate decisions,
+    and code improvement. Provides thorough analysis including requirements
+    traceability, risk assessment, and test strategy.
     Advisory only - teams choose their quality bar.
   customization: null
 persona:
@@ -219,7 +219,7 @@ commands:
   - gate {story}: Execute qa-gate task to write/update quality gate decision in directory from qa.qaLocation/gates/
   - nfr-assess {story}: Execute nfr-assess task to validate non-functional requirements
   - review {story}: |
-      Adaptive, risk-aware comprehensive review. 
+      Adaptive, risk-aware comprehensive review.
       Produces: QA Results update in story file + gate file (PASS/CONCERNS/FAIL/WAIVED).
       Gate file location: qa.qaLocation/gates/{epic}.{story}-{slug}.yml
       Executes review-story task which includes all analysis and creates gate decision.
@@ -990,6 +990,151 @@ The complete agent definition is available in [.bmad-core/agents/analyst.md](.bm
 
 When the user types `*analyst`, activate this Business Analyst persona and follow all instructions defined in the YAML configuration above.
 
-
 ---
 
+# RecipeWire Project Context
+
+## Project Overview
+
+RecipeWire is a **recipe sharing web application** designed to be an easy-to-use platform for creating, sharing, and discovering recipes. The project aims to build a **food community** that connects both novice and experienced cooks, featuring search/filtering capabilities and a review/rating system to ensure content quality and user engagement.
+
+The project is currently in the planning phase with comprehensive documentation already created but implementation has not yet started (apps directories are empty). The project uses the BMAD (Business Method for AI Development) framework for project management.
+
+### Vision
+To create an easy-to-use recipe sharing platform that covers creation, editing, and searching of recipes with a review system and community engagement features, ultimately becoming a food community connecting amateur and professional cooks.
+
+### Target Users
+- Home cooks and novices seeking easy recipes with quick search
+- Food enthusiasts wanting to share recipes and build personal brands
+- Users with dietary restrictions (vegetarian, gluten-free, etc.) needing filtered recipes
+
+## Architecture & Tech Stack
+
+### Frontend
+- Next.js (React) with TypeScript and strict mode
+- Tailwind CSS for styling
+- shadcn/ui for UI components
+- React Query for server state management
+- Zustand for UI state management
+
+### Backend
+- Node.js with NestJS framework
+- TypeScript with strict type checking
+- Zod for validation
+- JWT for authentication
+- PostgreSQL database with Prisma ORM
+- Local file storage for image uploads
+
+### Infrastructure
+- Docker and Docker Compose for development and production
+- Monorepo structure with pnpm workspaces
+- Directory structure:
+  ```
+  recipe-wire/
+  ├── apps/
+  │   ├── frontend/          # Next.js application
+  │   └── backend/           # NestJS API
+  ├── packages/
+  │   ├── types/             # Shared TypeScript types & Zod schemas
+  │   ├── utils/             # Shared utilities
+  │   └── ui/                # Shared UI components
+  ├── package.json           # Root workspace config
+  ```
+
+## Project Status & Roadmap
+
+### Current Status
+The project is in the early stages of development, with detailed planning completed:
+- Product Requirements Document (PRD) created
+- Solution Architecture defined
+- 41 user stories organized into 6 epics with sprint planning
+- Apps directories exist but are currently empty (implementation not yet started)
+
+### Phases
+1. **Phase 1 (MVP - 0-3 months)**: Core platform with authentication, recipe CRUD, search/filter, reviews/ratings, and responsive UI
+2. **Phase 2 (4-6 months)**: Social features, advanced dietary filters, personalized feeds
+3. **Phase 3 (7-12 months)**: Gamification, AI recipes, scaling infrastructure
+4. **Phase 4 (12+ months)**: Monetization through marketplace and premium features
+
+## Key Features (MVP)
+
+### Authentication & User System
+- Email/password signup/login
+- User profiles with display names, avatars, and bios
+- JWT token-based authentication with refresh capability
+
+### Recipe Management
+- Full CRUD operations for recipes
+- Rich recipe data including title, ingredients, steps, cooking time, images
+- Dynamic ingredient and step input fields
+
+### Search & Filter
+- Text search on recipe titles and descriptions
+- Filtering by category, cooking time
+- Sorting by popularity, latest, cooking time
+
+### Reviews & Ratings
+- Star rating system (1-5 stars)
+- Text reviews
+- Average rating calculation and display
+
+## Development Process
+
+The project uses the **BMAD (Business Method for AI Development)** framework with:
+- Well-defined user stories organized in sprints
+- Architecture documentation with data models and API designs
+- CI/CD planning with unit, integration, and E2E testing
+- Security considerations following OWASP Top 10
+
+## File Structure & Documentation
+
+The project contains comprehensive documentation:
+- `docs/prd.md` - Product Requirements Document
+- `docs/architecture.md` - Solution Architecture
+- `docs/roadmap.md` - Development Roadmap
+- `docs/stories/` - 41 detailed user stories organized by epic
+- `.bmad-core/` - BMAD framework configuration and tools
+
+## Development Conventions
+
+### Coding Standards
+- TypeScript strict mode with detailed configuration
+- ESLint and Prettier for consistent code style
+- Zod schemas for validation across frontend and backend
+- Path aliases for clean imports (@recipe-wire/types, etc.)
+
+### Data Model
+- PostgreSQL database with comprehensive ERD
+- Users, recipes, recipe steps, ingredients, reviews, categories, and dietary tags
+- Denormalized rating averages for fast reads
+- UUID primary keys throughout
+
+### Security
+- JWT authentication with 15-minute access tokens and 7-day refresh tokens
+- Bcrypt/Argon2 for password hashing
+- Zod validation and HTML sanitization
+- Secure file upload with size/type restrictions
+
+## Building and Running
+
+The project is designed to be built and run using:
+- pnpm workspaces for monorepo management
+- Docker Compose for development environment
+- Separate Next.js and NestJS applications with shared packages
+- PostgreSQL database with Prisma ORM
+
+**Note**: The actual implementation has not yet begun, as the apps directories are currently empty. The planning phase is complete with detailed specifications.
+
+## Success Metrics
+
+- Monthly new user acquisition
+- Daily recipe creation/sharing volume
+- Average session time
+- 30-day retention rate (target ≥ 40%)
+
+## Project Directories
+
+- `.bmad-core/` - BMAD framework configuration and tools
+- `apps/` - Frontend and backend applications (currently empty)
+- `docs/` - Comprehensive documentation (PRD, architecture, user stories, roadmap)
+- `QWEN.md` - This project context file
